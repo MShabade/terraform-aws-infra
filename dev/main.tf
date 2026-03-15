@@ -38,3 +38,28 @@ module "compute" {
     Owner       = "team-name"
   }
 }
+
+module "alb" {
+  source              = "../modules/alb"
+  region              = "eu-west-1"
+  vpc_id              = module.network.vpc_id
+  public_subnet_ids   = module.network.public_subnet_ids
+  target_instance_ids = module.compute.instance_ids
+  alb_name            = "my-app-alb"
+  common_tags = {
+    Environment = "dev"
+    Project     = "my-project"
+    Owner       = "team-name"
+  }
+}
+
+module "rds" {
+  source = "../../modules/rds"
+
+  db_name   = "mydb"
+  username  = "admin"
+  password  = "StrongPassword123!"
+
+  vpc_id     = module.vpc.vpc_id
+  subnet_ids = module.vpc.private_subnets
+}
