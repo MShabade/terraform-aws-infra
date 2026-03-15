@@ -11,3 +11,30 @@ module "network" {
 
   region = "eu-west-1" # Europe ( Ireland )
 }
+
+module "security" {
+  source      = "../modules/security"
+  vpc_id      = module.network.vpc_id
+  common_tags = {
+    Environment = "dev"
+    Project     = "my-project"
+    Owner       = "team-name"
+  }
+  allow_ssh_from = "37.228.236.28/32"
+}
+
+module "compute" {
+  source            = "../modules/compute"
+  region            = "eu-west-1"
+  vpc_id            = module.network.vpc_id
+  subnet_ids        = module.network.private_subnet_ids
+  security_group_ids = [module.security.ec2_sg_id]
+  key_name          = "devops-tf-key"
+  instance_type     = "t3.micro"
+  instance_count    = 1
+  common_tags = {
+    Environment = "dev"
+    Project     = "my-project"
+    Owner       = "team-name"
+  }
+}
