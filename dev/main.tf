@@ -63,3 +63,26 @@ module "rds" {
   vpc_id     = module.network.vpc_id
   subnet_ids = module.network.private_subnet_ids
 }
+
+module "iam" {
+  source = "../modules/iam"
+  region = "eu-west-1"
+  common_tags = {
+    Environment = "dev"
+    Project     = "my-project"
+    Owner       = "team-name"
+  }
+}
+
+module "cloudwatch" {
+  source            = "../modules/cloudwatch"
+  region            = "eu-west-1"
+  ec2_instance_ids  = module.compute.instance_ids
+  alb_arn           = module.alb.alb_arn
+  rds_instance_ids  = [module.rds.rds_instance_id]  # make sure your RDS module output is `rds_instance_id`
+  common_tags = {
+    Environment = "dev"
+    Project     = "my-project"
+    Owner       = "team-name"
+  }
+}
