@@ -86,3 +86,29 @@ module "cloudwatch" {
     Owner       = "team-name"
   }
 }
+
+module "my_lambda" {
+  source      = "../modules/lambda"
+  lambda_name = "my-function"
+  handler     = "index.handler"
+  runtime     = "nodejs18.x"
+  role_arn    = module.iam.lambda_role_arn
+  s3_bucket   = "myproject-lambda-code-eu-west-1"
+  s3_key      = "lambda.zip"
+  common_tags = {
+    Environment = "dev"
+    Project     = "my-project"
+    Owner       = "team-name"
+  }
+}
+
+module "lambda_code_bucket" {
+  source      = "../modules/s3"
+  bucket_name = "myproject-lambda-code-eu-west-1"  # ✅ unique
+  region      = "eu-west-1"
+  common_tags = {
+    Environment = "dev"
+    Project     = "my-project"
+    Owner       = "team-name"
+  }
+}
