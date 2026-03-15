@@ -9,3 +9,8 @@ output "rds_role_arn" {
 output "s3_role_arn" {
   value = aws_iam_role.s3_role.arn
 }
+
+output "lambda_role_arn" {
+  description = "IAM role ARN for Lambda"
+  value       = aws_iam_role.lambda_role.arn
+}
