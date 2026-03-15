@@ -54,12 +54,12 @@ module "alb" {
 }
 
 module "rds" {
-  source = "../../modules/rds"
+  source = "../modules/rds"
 
-  db_name   = "mydb"
-  username  = "admin"
-  password  = "StrongPassword123!"
+  db_name  = "mydb"
+  username = "admin"
+  password = "StrongPassword123!"
 
-  vpc_id     = module.vpc.vpc_id
-  subnet_ids = module.vpc.private_subnets
+  vpc_id     = module.network.vpc_id
+  subnet_ids = module.network.private_subnet_ids
 }
